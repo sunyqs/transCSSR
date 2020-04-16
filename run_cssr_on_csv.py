@@ -1,10 +1,8 @@
-import glob
 from transCSSR_bc import *
 from os.path import join
 import os
-import re
 import csv
-from utils import csv_to_list, sort_nicely, get_uniques_from_2d_list
+from utils import csv_to_list, get_uniques_from_2d_list
 
 
 def cssr(string_y, ays, yt_name, l_max):
@@ -66,48 +64,75 @@ def cssr(string_y, ays, yt_name, l_max):
         ))
 
 
-if __name__ == '__main__':
-    # parameters
-    # specify data source here: CREATE csv directly in main folder!
-    MAX_L = 1
-    # Directory Prefix to hold the final output files.
-    #   The final directory will be appended with MAX_L.
-    #   Ex: 'output_cssr' => 'output_cssr_L1'
-    PATH_OUTPUT = 'output_cssr'
-
+def main(path_outputyt, prefix_outdir, max_l):
+    """ Run CSSR on the given input files and generate output files and
+        conditional measures in the given directory.
+    Arguments:
+        path_outputyt: str
+            Path to the outputYt csv file. E.g.: 'csv/outputYt.csv'
+        prefix_outdir: str
+            Prefix naming of the output directory. Actual output directory will
+            be appended with @max_l.
+            E.g.: 'output_trans' with @max_l=1 will have outputs under
+                './output_trans_L1'
+        max_l: int
+            The maximum L value for computing the transducer.
+    Returns
+    """
     # create the final output directory
-    PATH_OUTPUT += '_L' + str(MAX_L)
-    PATH_DOT_RESULTS = os.path.join(PATH_OUTPUT, 'dot_results')
+    dir_out = prefix_outdir + '_L' + str(max_l)
+    PATH_DOT_RESULTS = os.path.join(dir_out, 'dot_results')
     os.makedirs(PATH_DOT_RESULTS, exist_ok=True)
-    # cols = csv_to_list('csv/RawDataCategorical_halfs.csv')
-    cols = csv_to_list('csv/Yt_test.csv')
-    unique_outcomes = get_uniques_from_2d_list(cols)
+    # load in the .csv as column-major 2d-lists
+    cols_y = csv_to_list(path_outputyt)
+    # Find a set of unique outcomes for each of x & y
+    ays = get_uniques_from_2d_list(cols_y)
 
-    for col in cols:
-        header = col[0]
-        stringY = ''.join(col[1:])
-        cssr(stringY, unique_outcomes, header, MAX_L)
+    # List to save C_X & h_X for each pair so we can write to results.csv later
+    results = []
+    # Headers of CSV:
+    header = [
+        'machine_name', 'machine_H[X_{0}]', "machine_E", 'machine_C_mu',
+        'machine_h_mu',
+    ]
+    # Loop through each pair of columns in the CSVs
+    for col_y in cols_y:
+        yt_name = col_y[0]
+        name_machine = '+%s.dot' % yt_name
 
-    # move all of the generated files to the new designated directory
-    pattern = r'\+W[0-9]*\.[1-2]\.(dat_results|dot)'
-    paths = [
-        f for f in glob.glob('transCSSR_results/*') if re.search(pattern, f)]
-    for path in paths:
-        fname = os.path.split(path)[-1]
-        os.rename(
-            path, os.path.join(PATH_DOT_RESULTS, fname.replace('+', '_'))
+        stringY = ''.join(col_y[1:])
+        cssr(stringY, ays, yt_name, max_l)
+        HLs, _, h_mu_mach, _, E, C_mu_mach, _ = compute_ict_measures(
+            join('transCSSR_results', name_machine),
+            ays, 'transCSSR', L_max=max_l
         )
+        # Also move away the cssr. e.g.: +Y1.dot & +Y1.dat_results
+        name_machine_dat = name_machine[:-4] + '.dat_results'
+        os.rename(
+            join('transCSSR_results', name_machine),
+            join(
+                PATH_DOT_RESULTS, 'mach_' + name_machine.replace('+', '_')
+            )
+        )
+        os.rename(
+            join('transCSSR_results', name_machine_dat),
+            join(
+                PATH_DOT_RESULTS, 'mach_' + name_machine_dat.replace('+', '_')
+            )
+        )
+        results.append([
+            'mach_' + name_machine.replace('+', '_'),
+            HLs[0], E, C_mu_mach, h_mu_mach,
+        ])
 
-    # Sort the files in a natural order and generate the 4var .csv
-    dot_paths = glob.glob(os.path.join(PATH_DOT_RESULTS, '*.dot'))
-    sort_nicely(dot_paths)
-    with open(os.path.join(PATH_OUTPUT, 'results.csv'), 'w') as f:
+    # Now that we have moved all of the .dot & .dat_results, let's create the
+    #   results.csv that has the C_mu & h_mu
+    with open(join(dir_out, 'results.csv'), 'w') as f:
         writer = csv.writer(f, quoting=2)
-        header = ['dot_filename', 'Cmu', 'H[X_{0}]', 'hmu', 'E']
         writer.writerow(header)
-        for p in dot_paths:
-            print(p)
-            HLs, hLs, hmu, ELs, E, Cmu, etas_matrix = compute_ict_measures(
-                p, unique_outcomes, 'transCSSR', L_max=MAX_L)
-            fn = os.path.split(p)[-1]
-            writer.writerow([fn, Cmu, HLs[0], hmu, E])
+        for row in results:
+            writer.writerow(row)
+
+
+if __name__ == '__main__':
+    main('csv/Yt_test.csv', 'output_cssr_yt_test', 1)
