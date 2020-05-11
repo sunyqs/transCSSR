@@ -11,7 +11,7 @@
 
 The repository transCSSR here contains a csv folder, including `Yt_test.csv` and `Xt_test.csv` with three sequences. By default,
 *   `run_cssr4eM_on_csv` targets `csv/Yt_test.csv` and generates files at `output_cssr_yt_test_L1`, with the measures for the respective three epsilon-machines for word-length 1.
-*   `run_cssr4eT_on_csv` targets `csv/full_Xt.csv` & `csv/full_Yt.csv` and generates files at `output_trans_L1`
+*   `run_cssr4eT_on_csv` targets `csv/Yt_test.csv` & `csv/Xt_test.csv` and generates files at the newly created folder `output_trans_L1`
 
 
 
