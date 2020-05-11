@@ -2,7 +2,7 @@
 # It calculates epsilon-machines (univariate, eM) and epsilon-transducers (bivariate input-output, eT), as an implementation of Cosma Shalizi's Causal State Splitting Reconstruction (CSSR) http://bactra.org/CSSR/
 # This file should be placed in the main folder of the transCSSR download, 'transCSSR-master' and adds to the existing code From Dave Darmon by:
     # reading from csv: automatically reading temporal sequences coded as columns (with headers) from a csv file
-       # Y_t is the input and X_t is the output of the transducer
+       # Y_t is the input that affects X_t, which is the output of the transducer
        # both inputs and outputs are stored in different csv files. The code lines up the respective columns and then derives a different eT for each pair of columns
     # alphabet detection: takes the symbols of the involved alphabet directly, without the need to input them manually in the script
     # output file: calculates and prints measures for (1) e-machine, (2) e-transducer with lag, (3) e-transducer without lag
