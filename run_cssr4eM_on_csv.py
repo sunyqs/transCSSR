@@ -10,8 +10,8 @@
 ##### this script was coded by Timothy Zhang, at UC Davis, C^2-Lab https://github.com/3tz/transCSSR ####
     
 # to-do:    
-    # define l_max: the maximum word-length to be tested for
-    # to read data, CREATE a folder called csv directly in main folder where this code is stored
+    # define input file and word-length in last line below
+    # to read data, CREATE a folder called csv directly in main folder where this code is stored (if not existent already)
       # store data in csv format, first row header of sequence, columns with data. All columns must have the same length
       # the code will read in the alphabet automatically. The categorical alphabet must be coded as one-letter per event
       # define filename of the csv's in last code-block below
@@ -151,6 +151,9 @@ def main(path_outputyt, prefix_outdir, max_l):
         for row in results:
             writer.writerow(row)
 
-
+# define YOUR input here 
+  #('your_csv_file.csv',...) to be stored in the csv folder in transCSSR
+  # (..., 'output_file_name',...) name of newly created folder with output
+  # (..., 'integer') the word length  
 if __name__ == '__main__':
     main('csv/Yt_test.csv', 'output_cssr_yt_test', 1)
