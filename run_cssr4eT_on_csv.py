@@ -233,8 +233,8 @@ def main(path_inputxt, path_outputyt, prefix_outdir, max_l):
 
 if __name__ == '__main__':
     main(
-        path_inputxt='csv/full_Xt.csv',
-        path_outputyt='csv/full_Yt.csv',
+        path_inputxt='csv/Yt_test.csv',
+        path_outputyt='csv/Xt_test.csv',
         prefix_outdir='output_trans',
         max_l=1,
     )
