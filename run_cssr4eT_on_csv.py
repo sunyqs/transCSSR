@@ -1,3 +1,26 @@
+# This code is based on David Darmon's transCSSR code https://github.com/ddarmon/transCSSR written for Python 3.7
+# It calculates epsilon-machines (univariate, eM) and epsilon-transducers (bivariate input-output, eT), as an implementation of Cosma Shalizi's Causal State Splitting Reconstruction (CSSR) http://bactra.org/CSSR/
+# This file should be placed in the main folder of the transCSSR download, 'transCSSR-master' and adds to the existing code From Dave Darmon by:
+    # reading from csv: automatically reading temporal sequences coded as columns (with headers) from a csv file
+       # Y_t is the input and X_t is the output of the transducer
+       # both inputs and outputs are stored in different csv files. The code lines up the respective columns and then derives a different eT for each pair of columns
+    # alphabet detection: takes the symbols of the involved alphabet directly, without the need to input them manually in the script
+    # output file: calculates and prints measures for (1) e-machine, (2) e-transducer with lag, (3) e-transducer without lag
+    # The output is:
+        # machine_name; machine_H[X_{0}]; machine_E; machine_C_mu; machine_h_mu; transducer_name; transducer_C_mu; transducer_h_mu; transducer_bc_name; transducer_bc_C_mu; transducer_bc_h_mu
+            # whereas "transducer_bc" means that it uses Barnett & Crutchfield, who account for the influence of Y_t on X_t: P(X_t | Y_t, Y_t-inf, X_t-inf), 
+            # and transducer without "_bc" it follows Shalizi, who only uses past influences:  P(X_t | Y_t-inf, X_t-inf)
+        # the output results file will be stored in a new folder in transCSSR-master, together with a new sub-folder with the .dot and .dat results
+    
+##### this script was coded by Timothy Zhang, at UC Davis, C^2-Lab https://github.com/3tz/transCSSR ####
+    
+    
+## define Max_L (the maximal word length) in the last line of code
+## to read data, CREATE a folder called csv directly in main folder where this code is stored
+  # store data in csv format, first row header of sequence, columns with data. All columns must have the same length
+  # the code will read in the alphabet automatically. The categorical alphabet must be coded as one-letter per event
+  # define filename of the csv's in last code-block below
+
 import csv
 import itertools
 import transCSSR as tC
