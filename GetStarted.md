@@ -6,12 +6,12 @@
 
 
 **AUTOMATE INPUT:** the scripts called 'run_cssr..._on_csv' allow to read in sequence data directly from csv files. The script 
-   `run_cssr4eM_on_csv` derives a separate epsilon-machine for each input column, and  
-   `run_cssr4eT_on_csv` derives an epsilon-transducer for each input-output pair. 
+*   `run_cssr4eM_on_csv` derives a separate epsilon-machine for each input column, and  
+*   `run_cssr4eT_on_csv` derives an epsilon-transducer for each input-output pair. 
 
 The repository transCSSR here contains a csv folder, including `Yt_test.csv` and `Xt_test.csv` with three sequences. By default,
-   `run_cssr4eM_on_csv` targets `csv/Yt_test.csv` and generates files at `output_cssr_yt_test_L1`, with the measures for the respective three epsilon-machines for word-length 1.
-   `run_cssr4eT_on_csv` targets `csv/full_Xt.csv` & `csv/full_Yt.csv` and generates files at `output_trans_L1`
+*   `run_cssr4eM_on_csv` targets `csv/Yt_test.csv` and generates files at `output_cssr_yt_test_L1`, with the measures for the respective three epsilon-machines for word-length 1.
+*   `run_cssr4eT_on_csv` targets `csv/full_Xt.csv` & `csv/full_Yt.csv` and generates files at `output_trans_L1`
 
 
 
