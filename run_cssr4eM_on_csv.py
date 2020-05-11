@@ -1,3 +1,21 @@
+# This code is based on David Darmon's transCSSR code https://github.com/ddarmon/transCSSR written for Python 3.7
+# It derives epsilon-machines (eM) from one string of sequence data (univariate) via an implementation of Cosma Shalizi's Causal State Splitting Reconstruction (CSSR) http://bactra.org/CSSR/
+# Ihis file should be placed in the main folder of the transCSSR download, 'transCSSR-master' and adds the following:
+    # reading from csv: automatically reading temporal sequences coded as columns (with headers) from a csv file
+    # alphabet detection: takes the symbols of the involved alphabet directly, without the need to input them manually in the script
+    # output file: calculates and prints measures for (1) e-machine
+        # The output is:
+            # Cmu	H[X_{0}]	hmu  	E
+            # the output results file will be stored in a new folder in transCSSR-master, together with a new sub-folder with the .dot and .dat results
+##### this script was coded by Timothy Zhang, at UC Davis, C^2-Lab https://github.com/3tz/transCSSR ####
+    
+# to-do:    
+    # define l_max: the maximum word-length to be tested for
+    # to read data, CREATE a folder called csv directly in main folder where this code is stored
+      # store data in csv format, first row header of sequence, columns with data. All columns must have the same length
+      # the code will read in the alphabet automatically. The categorical alphabet must be coded as one-letter per event
+      # define filename of the csv's in last code-block below
+
 from transCSSR_bc import *
 from os.path import join
 import os
